@@ -1,114 +1,96 @@
 import os
 import csv
-PyPoll_data = os.path.join('..', 'election_data.csv')
-with open (PyPoll_data, newline='') as csvfile:
+PyBank_budget = os.path.join('..', 'budget_data.csv')
+with open (PyBank_budget, newline='') as csvfile:
     csv_file = csv.reader(csvfile, delimiter=',')
     csv_header = next(csvfile)
     #print(f"Header: {csv_header}")
 
-    voter_id=[]
-    county=[]
-    candidate=[]
+    date = []
+    profit_loss = []
     for row in csv_file:
-        voter_id.append(row[0])
-        county.append(row[1])
-        candidate.append(row[2])
+        date.append(row[0])
+        profit_loss.append(row[1])
 
-#print (voter_id)
-#print (county)
-#print (candidate)
+#print(date)
+#print(profit_loss)
 
 #PART 1
-voter_id_count= len(voter_id)
-#print(voter_id_count)
+date2 = [x[:3] for x in date]
+#print(date2)
+number_months= len(date2)
+#print(number_months)
 
 #PART 2
-votes = 0
-unique_candidates= set()
-PyPoll_data = os.path.join('..', 'election_data.csv')
-with open (PyPoll_data, newline='') as csvfile:
-    csv_file = csv.reader(csvfile, delimiter=',')
-    csv_header = next(csvfile)
-    for row in csv_file:
-        unique_candidates.add(row[2])
-    #print(unique_candidates)
+newlist = []
+for i in profit_loss:
+    x = int(i)
+    newlist.append(x)
+#print(newlist)
 
-#PART 3-4
-votes = 0
-num_votes=[]
-list_cand= []
-PyPoll_data = os.path.join('..', 'election_data.csv')
-with open (PyPoll_data, newline='') as csvfile:
-    csv_file = csv.reader(csvfile, delimiter=',')
-    csv_header = next(csvfile)
-    for row in csv_file:
-        list_cand.append(row[2])
-    #print(list_cand)
 
-khan_total = []
-li_total = []
-tooley_total = []
-correy_total = []
+profit_loss_int = [int(x) for x in profit_loss]
+#print(profit_loss_int)
+net_profit_loss=sum(profit_loss_int)
+print(net_profit_loss)
 
-for i in list_cand:
-    if i == "Khan":
-        khan_total.append(i)
-    elif i == "Correy":
-        correy_total.append(i)
-    elif i == "O'Tooley":
-        tooley_total.append(i)
-    elif i == "Li":
-        li_total.append(i)
-khan_final=len(khan_total)
-li_final=len(li_total)
-tooley_final=len(tooley_total)
-correy_final=len(correy_total)
+average_change = []
+#print(range(len(profit_loss) - 1))
 
-#print(khan_final)
-#print(li_final)
-#print(tooley_final)
-#print(correy_final)
+#PART 3
+a = range(len(profit_loss) - 1)
+for i in a:
+    x = profit_loss_int[i]
+    y = profit_loss_int[i+1]
+    change = y - x
+    average_change.append(change)
+average_change_2=sum(average_change)
+average_change_pl=(average_change_2)/int(number_months-1)
+#print(average_change_pl)
 
-khan_1= int(khan_final)/int(voter_id_count)
-khan_percent= khan_1*100
-li_1= int(li_final)/int(voter_id_count)
-li_percent= li_1*100
-tooley_1= int(tooley_final)/int(voter_id_count)
-tooley_percent= tooley_1*100
-correy_1=int(correy_final)/int(voter_id_count)
-correy_percent= correy_1*100
+#PART 4 + 5
+change_dates = date[1:]
 
-#print(khan_percent)
-#print(li_percent)
-#print(tooley_percent)
-#print(correy_percent)
 
-#PART 5
-cand_full= {(khan_final,'Khan'),(li_final,'Li'),(tooley_final,'OTooley'),(correy_final,'Correy')}
-winner = max(cand_full)
-#print (winner)
+zipped = list(zip(change_dates, average_change))
+max_month = max(average_change)
+min_month = min(average_change)
+print(zipped)
+for i in zipped:
+    if i[1] == max_month:
+        max_both = [i[0], i[1]]
+       
+    if i[1] == min_month:
+        min_both = [i[0], i[1]]
+        
+#print(max_both[0], max_both[1])
+#print(min_both[0], max_both[1])
 
-print("Election Results")
+print("Financial Analysis")
 print("______________________________________________________________________")
-print("Total Votes: " + str(voter_id_count))
-print("______________________________________________________________________")
-print("Khan: " + str(khan_percent)[:4] + "(" +str(khan_final) + ")")
-print("Correy: " + str(round(correy_percent,3)) + "(" +str(correy_final) + ")")
-print("Li: " + str(round(li_percent,3)) + "(" +str(li_final) + ")")
-print("O'Tooley: " + str(round(tooley_percent,3))+ "(" +str(tooley_final) + ")")
-print("______________________________________________________________________")
-print("Winner: " + str(winner))
+print("Total Months: " + str(number_months))
+print("Total Profit/Loss: " + "$" + str(net_profit_loss))
+print("Average Change: " + "$" + str(average_change_pl))
+print("Greatest Increase in Profits: " + str(max_both[0]) + "($" + str(max_both[1]) + ")")
+print("Greatest Increase in Profits: " + str(min_both[0]) + "($" + str(min_both[1]) + ")")
 
-with open("outputPyPoll.txt","w") as csv_output:
+with open("outputPyBank.txt","w") as csv_output:
     output = csv.writer(csv_output, delimiter=",")
-    output.writerow(["Election Results"])
+    output.writerow(["Financial Analysis"])
     output.writerow(["______________________________________________________________________"])
-    output.writerow(["Total Votes: " + str(voter_id_count)])
-    output.writerow(["______________________________________________________________________"])
-    output.writerow(["Khan: " + str(khan_percent)[:4] + "(" +str(khan_final) + ")"])
-    output.writerow(["Correy: " + str(round(correy_percent,3)) + "(" +str(correy_final) + ")"])
-    output.writerow(["Li: " + str(round(li_percent,3)) + "(" +str(li_final) + ")"])
-    output.writerow(["O'Tooley: " + str(round(tooley_percent,3))+ "(" +str(tooley_final) + ")"])
-    output.writerow(["______________________________________________________________________"])
-    output.writerow(["Winner: " + str(winner)])
-#file.close()
+    output.writerow(["Total Months: " + str(number_months)])
+    output.writerow(["Total Profit/Loss: " + "$" + str(net_profit_loss)])
+    output.writerow(["Average Change: " + "$" + str(average_change_pl)])
+    output.writerow(["Greatest Increase in Profits: " + str(max_both[0]) + "($" + str(max_both[1]) + ")"])
+    output.writerow(["Greatest Increase in Profits: " + str(min_both[0]) + "($" + str(min_both[1]) + ")"])
+
+# file.close()
+
+
+    
+
+
+
+
+    
+    
