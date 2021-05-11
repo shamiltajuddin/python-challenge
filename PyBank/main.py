@@ -55,7 +55,7 @@ change_dates = date[1:]
 zipped = list(zip(change_dates, average_change))
 max_month = max(average_change)
 min_month = min(average_change)
-print(zipped)
+#print(zipped)
 for i in zipped:
     if i[1] == max_month:
         max_both = [i[0], i[1]]
